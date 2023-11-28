@@ -1,6 +1,6 @@
 package com.vet.vet.BackEnd.dao;
 
-import com.vet.vet.entities.Animal;
+import com.vet.vet.BackEnd.entities.Animal;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.vet.vet.entities;
+package com.vet.vet.BackEnd.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,6 +16,6 @@ import java.util.List;
 @AllArgsConstructor
 public class Customer extends Person{
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "customer",cascade = CascadeType.REMOVE)
     private List<Animal> animalList;
 }

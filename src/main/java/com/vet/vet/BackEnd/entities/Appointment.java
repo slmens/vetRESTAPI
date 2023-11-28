@@ -1,4 +1,4 @@
-package com.vet.vet.entities;
+package com.vet.vet.BackEnd.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -16,8 +16,7 @@ import java.time.LocalDateTime;
 public class Appointment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "appointment_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
@@ -26,11 +25,10 @@ public class Appointment {
 
     @NotBlank
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "doctor_id",referencedColumnName = "id")
     private Doctor doctor;
 
     @NotBlank
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "animal_id",referencedColumnName = "animal_id")
+    @JoinColumn(name = "animal_id")
     private Animal animal;
 }

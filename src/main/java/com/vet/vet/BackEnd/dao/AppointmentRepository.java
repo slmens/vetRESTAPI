@@ -1,6 +1,6 @@
 package com.vet.vet.BackEnd.dao;
 
-import com.vet.vet.entities.Appointment;
+import com.vet.vet.BackEnd.entities.Appointment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

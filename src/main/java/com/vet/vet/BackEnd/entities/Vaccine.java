@@ -1,4 +1,4 @@
-package com.vet.vet.entities;
+package com.vet.vet.BackEnd.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -16,8 +16,7 @@ import java.time.LocalDate;
 public class Vaccine {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "vaccine_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
@@ -33,6 +32,6 @@ public class Vaccine {
     private LocalDate protectionEndDate;
 
     @ManyToOne
-    @JoinColumn(name = "animal_id",referencedColumnName = "animal_id")
+    @JoinColumn(name = "animal_id")
     private Animal animal;
 }

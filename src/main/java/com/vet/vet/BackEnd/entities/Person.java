@@ -1,14 +1,17 @@
-package com.vet.vet.entities;
+package com.vet.vet.BackEnd.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
 
 @MappedSuperclass
+@Data
 public abstract class Person {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
@@ -16,10 +19,12 @@ public abstract class Person {
     private String name;
 
     @NotBlank
+    @Size(max = 20,message = "Input should not exceed 20 characters!")
     @Column(name = "phone_number")
     private String phone;
 
     @NotBlank
+    @Email
     @Column(name = "mail")
     private String mail;
 

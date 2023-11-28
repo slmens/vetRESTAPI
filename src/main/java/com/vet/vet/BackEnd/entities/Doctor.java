@@ -1,4 +1,4 @@
-package com.vet.vet.entities;
+package com.vet.vet.BackEnd.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,9 +16,9 @@ import java.util.List;
 @AllArgsConstructor
 public class Doctor extends Person {
 
-    @OneToMany(mappedBy = "doctor",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "doctor",fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     private List<Appointment> appointments;
 
-    @OneToMany(mappedBy = "doctor",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "doctor",fetch = FetchType.EAGER,cascade = CascadeType.REMOVE)
     private List<AvailableDate> availableDates;
 }

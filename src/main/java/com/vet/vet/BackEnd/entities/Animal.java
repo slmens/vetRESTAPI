@@ -1,4 +1,4 @@
-package com.vet.vet.entities;
+package com.vet.vet.BackEnd.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -17,8 +17,7 @@ import java.util.List;
 public class Animal {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "animal_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
@@ -44,12 +43,12 @@ public class Animal {
 
     @NotBlank
     @ManyToOne
-    @JoinColumn(name = "customer_id",referencedColumnName = "id")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
     @OneToMany(mappedBy = "animal")
     private List<Appointment> appointmentList;
 
-    @OneToMany(mappedBy = "animal")
+    @OneToMany(mappedBy = "animal",cascade = CascadeType.REMOVE)
     private List<Vaccine> vaccines;
 }

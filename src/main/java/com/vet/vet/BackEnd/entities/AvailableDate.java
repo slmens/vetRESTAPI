@@ -1,4 +1,4 @@
-package com.vet.vet.entities;
+package com.vet.vet.BackEnd.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -16,8 +16,7 @@ import java.time.LocalDate;
 public class AvailableDate {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "available_date_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @NotBlank
@@ -26,6 +25,6 @@ public class AvailableDate {
 
     @NotBlank
     @ManyToOne
-    @JoinColumn(name = "doctor_id",referencedColumnName = "id")
+    @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 }

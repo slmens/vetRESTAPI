@@ -1,1 +1,1 @@
-![vetUML drawio](https://github.com/slmens/vetRESTAPI/assets/99343829/01e8fa03-df91-4625-a8e2-bbc30648e388)
+![vetUMLast](https://github.com/slmens/vetRESTAPI/assets/99343829/29457c1f-a8a1-41ee-9919-596272cae4bc)

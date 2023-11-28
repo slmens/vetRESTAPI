@@ -48,7 +48,7 @@ public class DoctorManager implements IDoctorService {
     public Boolean save(DoctorSaveDTO doctorSaveDTO) {
         Boolean result = false;
 
-        //try {
+        try {
             Doctor doctor = modelMapper.map(doctorSaveDTO,Doctor.class);
             doctor.setAppointments(null);
             doctor.setAvailableDates(null);
@@ -60,10 +60,10 @@ public class DoctorManager implements IDoctorService {
             }
 
             return result;
-        //}catch (Exception e){
-          //  System.out.println(e.getMessage());
-            //return result;
-        //}
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return result;
+        }
     }
 
     @Override

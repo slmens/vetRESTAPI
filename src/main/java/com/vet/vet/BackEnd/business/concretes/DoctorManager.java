@@ -67,23 +67,30 @@ public class DoctorManager implements IDoctorService {
     }
 
     @Override
-    public Boolean update(DoctorSaveDTO doctorSaveDTO) {
+    public Boolean update(DoctorSaveDTO doctorSaveDTO,Long id) {
         Boolean result = false;
 
-        try {
-            Doctor doctor = modelMapper.map(doctorSaveDTO,Doctor.class);
 
-            Doctor pseudoDoc = this.doctorRepository.save(doctor);
+        if (this.doctorRepository.existsById(id)){
+            doctorSaveDTO.setId(id);
 
-            if (pseudoDoc.getClass() == Doctor.class){
-                result = true;
+            try {
+                Doctor doctor = modelMapper.map(doctorSaveDTO,Doctor.class);
+
+                Doctor pseudoDoc = this.doctorRepository.save(doctor);
+
+                if (pseudoDoc.getClass() == Doctor.class){
+                    result = true;
+                }
+
+                return result;
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+                return result;
             }
-
-            return result;
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-            return result;
         }
+
+        return result;
     }
 
     @Override

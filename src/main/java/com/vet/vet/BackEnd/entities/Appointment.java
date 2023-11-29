@@ -24,11 +24,11 @@ public class Appointment {
     private LocalDateTime appointmentDate;
 
     @NotBlank
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Doctor doctor;
 
     @NotBlank
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "animal_id")
     private Animal animal;
 }

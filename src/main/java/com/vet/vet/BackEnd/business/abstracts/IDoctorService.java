@@ -9,6 +9,6 @@ public interface IDoctorService {
     List<DoctorResponseDTO> findAll();
     DoctorResponseDTO findById(Long id);
     Boolean save(DoctorSaveDTO doctorSaveDTO);
-    Boolean update(DoctorSaveDTO doctorSaveDTO);
+    Boolean update(DoctorSaveDTO doctorSaveDTO,Long id);
     Boolean delete(Long id);
 }

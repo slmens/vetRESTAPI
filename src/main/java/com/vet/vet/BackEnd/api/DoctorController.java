@@ -17,8 +17,6 @@ public class DoctorController {
         this.doctorManager = doctorManager;
     }
 
-    // entitylere validation mesela email gibi telefon maks uzunluğu gibi
-
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public DoctorResponseDTO findById(@PathVariable("id") Long id){
@@ -41,7 +39,7 @@ public class DoctorController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Boolean update(@RequestBody DoctorSaveDTO doctorSaveDTO, @PathVariable("id") Long id){
-        return this.doctorManager.update(doctorSaveDTO);
+        return this.doctorManager.update(doctorSaveDTO,id);
     }
 
     @DeleteMapping("/{id}")

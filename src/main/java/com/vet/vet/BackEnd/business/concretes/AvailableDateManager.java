@@ -100,12 +100,17 @@ public class AvailableDateManager implements IAvailableDateService {
     @Override
     public Boolean delete(Long id) {
         Boolean result = false;
-        try {
-            this.availableDateRepository.deleteById(id);
-            result = true;
-        }catch (Exception e){
-            return null;
+        if (this.availableDateRepository.existsById(id)){
+            try {
+                this.availableDateRepository.deleteById(id);
+                result = true;
+            }catch (Exception e){
+                return null;
+            }
+        }else{
+            throw  new RuntimeException(("there is no record with this id in database : " + id));
         }
+
         return result;
     }
 }

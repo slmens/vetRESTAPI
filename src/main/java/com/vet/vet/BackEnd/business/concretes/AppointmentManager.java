@@ -12,5 +12,8 @@ public class AppointmentManager implements IAppointmentService {
         this.appointmentRepository = appointmentRepository;
     }
 
+    // ID ile yaptığın işlemlerde önce databasede o veri var mı diye kontrol et
+
+
 
 }

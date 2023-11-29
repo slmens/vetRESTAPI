@@ -84,11 +84,15 @@ public class AnimalManager implements IAnimalService {
         // If the result variable returns true, this means that no error occurred during the deletion process.
         Boolean result = false;
 
-        try {
-            this.animalRepository.deleteById(id);
-            result = true;
-        }catch (Exception e){
-            System.out.println(e.getMessage());
+        if (this.animalRepository.existsById(id)){
+            try {
+                this.animalRepository.deleteById(id);
+                result = true;
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }else{
+            throw  new RuntimeException(("there is no record with this id in database : " + id));
         }
 
         return result;

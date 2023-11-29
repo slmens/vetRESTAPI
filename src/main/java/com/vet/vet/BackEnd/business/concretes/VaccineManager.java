@@ -12,5 +12,5 @@ public class VaccineManager implements IVaccineService {
         this.vaccineRepository = vaccineRepository;
     }
 
-
+    // ID ile yaptığın işlemlerde önce databasede o veri var mı diye kontrol et
 }

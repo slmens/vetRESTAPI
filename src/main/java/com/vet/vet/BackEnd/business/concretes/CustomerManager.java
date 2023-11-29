@@ -76,11 +76,15 @@ public class CustomerManager implements ICustomerService {
         // If the result variable returns true, this means that no error occurred during the deletion process.
         Boolean result = false;
 
-        try {
-            this.customerRepository.deleteById(id);
-            result = true;
-        }catch (Exception e){
-            System.out.println(e.getMessage());
+        if (this.customerRepository.existsById(id)){
+            try {
+                this.customerRepository.deleteById(id);
+                result = true;
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }else{
+            throw  new RuntimeException(("there is no record with this id in database : " + id));
         }
 
         return result;

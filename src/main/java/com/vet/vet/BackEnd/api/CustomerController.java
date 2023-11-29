@@ -47,7 +47,7 @@ public class CustomerController {
         return this.customerManager.findAllAnimalsByCustomerId(id);
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/customer/{name}")
     public List<Customer> findByName(@PathVariable("name") String name){
         return this.customerManager.findByName(name);
     }

@@ -2,7 +2,10 @@ package com.vet.vet.BackEnd.business.concretes;
 
 import com.vet.vet.BackEnd.business.abstracts.IAnimalService;
 import com.vet.vet.BackEnd.dao.AnimalRepository;
+import com.vet.vet.BackEnd.dao.CustomerRepository;
+import com.vet.vet.BackEnd.dto.requestDto.doctor.AnimalSaveDTO;
 import com.vet.vet.BackEnd.entities.Animal;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,9 +15,13 @@ import java.util.stream.Collectors;
 public class AnimalManager implements IAnimalService {
 
     private final AnimalRepository animalRepository;
+    private final ModelMapper modelMapper;
+    private final CustomerRepository customerRepository;
 
-    public AnimalManager(AnimalRepository animalRepository) {
+    public AnimalManager(AnimalRepository animalRepository, ModelMapper modelMapper,CustomerRepository customerRepository) {
         this.animalRepository = animalRepository;
+        this.modelMapper = modelMapper;
+        this.customerRepository = customerRepository;
     }
 
     @Override
@@ -33,10 +40,12 @@ public class AnimalManager implements IAnimalService {
     }
 
     @Override
-    public Boolean save(Animal animal) {
+    public Boolean save(AnimalSaveDTO animalSaveDTO) {
         Boolean result = false;
 
         try {
+            Animal animal = modelMapper.map(animalSaveDTO,Animal.class);
+            animal.setCustomer(this.customerRepository.findById(animalSaveDTO.getCustomerID()).orElseThrow());
             this.animalRepository.save(animal);
             result = true;
 
@@ -48,14 +57,16 @@ public class AnimalManager implements IAnimalService {
     }
 
     @Override
-    public Boolean update(Animal animal, Long id) {
+    public Boolean update(AnimalSaveDTO animalSaveDTO, Long id) {
         Boolean result = false;
 
 
         if (this.animalRepository.existsById(id)){
-            animal.setId(id);
+            animalSaveDTO.setId(id);
 
             try {
+                Animal animal = modelMapper.map(animalSaveDTO,Animal.class);
+                animal.setCustomer(this.customerRepository.findById(animalSaveDTO.getCustomerID()).orElseThrow());
                 this.animalRepository.save(animal);
 
                 result = true;
@@ -93,8 +104,8 @@ public class AnimalManager implements IAnimalService {
     public List<Animal> findByName(String name) {
         List<Animal> allAnimals = this.animalRepository.findAll();
 
-        List<Animal> filteredCustomers = allAnimals.stream().filter(animal -> name.equals(animal.getName())).collect(Collectors.toList());
+        List<Animal> filteredAnimals = allAnimals.stream().filter(animal -> name.equals(animal.getName())).collect(Collectors.toList());
 
-        return filteredCustomers;
+        return filteredAnimals;
     }
 }

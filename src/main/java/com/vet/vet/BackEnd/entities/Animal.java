@@ -1,7 +1,9 @@
 package com.vet.vet.BackEnd.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,7 +43,8 @@ public class Animal {
     @Column (name = "date_of_birth")
     private LocalDate dateOfBirth;
 
-    @NotBlank
+    @NotNull
+    @JsonIgnoreProperties(value = {"animalList"})
     @ManyToOne
     @JoinColumn(name = "customer_id")
     private Customer customer;

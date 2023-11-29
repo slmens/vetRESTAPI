@@ -1,6 +1,7 @@
 package com.vet.vet.BackEnd.api;
 
 import com.vet.vet.BackEnd.business.concretes.AnimalManager;
+import com.vet.vet.BackEnd.dto.requestDto.doctor.AnimalSaveDTO;
 import com.vet.vet.BackEnd.entities.Animal;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,13 +29,13 @@ public class AnimalController {
     }
 
     @PostMapping("/save")
-    public Boolean save(@RequestBody Animal animal){
-        return this.animalManager.save(animal);
+    public Boolean save(@RequestBody AnimalSaveDTO animalSaveDTO){
+        return this.animalManager.save(animalSaveDTO);
     }
 
     @PutMapping("/{id}")
-    public Boolean update(@RequestBody Animal animal, @PathVariable("id") Long id){
-        return this.animalManager.update(animal,id);
+    public Boolean update(@RequestBody AnimalSaveDTO animalSaveDTO, @PathVariable("id") Long id){
+        return this.animalManager.update(animalSaveDTO,id);
     }
 
     @DeleteMapping("/{id}")
@@ -42,7 +43,7 @@ public class AnimalController {
         return this.animalManager.delete(id);
     }
 
-    @GetMapping("/{name}")
+    @GetMapping("/animal/{name}")
     public List<Animal> findByName(@PathVariable("name") String name){
         return this.animalManager.findByName(name);
     }

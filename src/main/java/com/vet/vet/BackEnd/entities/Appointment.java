@@ -1,5 +1,6 @@
 package com.vet.vet.BackEnd.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -23,12 +24,14 @@ public class Appointment {
     @Column(name = "appointment_date")
     private LocalDateTime appointmentDate;
 
+    @JsonIgnoreProperties(value = {"appointments","availableDates"})
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     private Doctor doctor;
 
+    @JsonIgnoreProperties(value = {"appointmentList","vaccines","animalList"})
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "animal_id")
     private Animal animal;
 }

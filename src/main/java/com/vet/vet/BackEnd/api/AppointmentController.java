@@ -1,13 +1,9 @@
 package com.vet.vet.BackEnd.api;
 
-import com.vaadin.open.App;
 import com.vet.vet.BackEnd.business.concretes.AppointmentManager;
 import com.vet.vet.BackEnd.dto.requestDto.AppointmentSaveDTO;
-import com.vet.vet.BackEnd.dto.requestDto.AvailableDateSaveDTO;
+import com.vet.vet.BackEnd.dto.requestDto.AppointmentUpdateDTO;
 import com.vet.vet.BackEnd.entities.Appointment;
-import com.vet.vet.BackEnd.entities.AvailableDate;
-import org.atmosphere.config.service.Get;
-import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,8 +52,8 @@ public class AppointmentController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Boolean update(@RequestBody AppointmentSaveDTO appointmentSaveDTO, @PathVariable("id") Long id){
-        return this.appointmentManager.update(appointmentSaveDTO,id);
+    public Boolean update(@RequestBody AppointmentUpdateDTO appointmentUpdateDTO, @PathVariable("id") Long id){
+        return this.appointmentManager.update(appointmentUpdateDTO,id);
     }
 
     @DeleteMapping("/{id}")

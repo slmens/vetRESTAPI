@@ -52,6 +52,7 @@ public class Animal {
     @OneToMany(mappedBy = "animal")
     private List<Appointment> appointmentList;
 
+    @JsonIgnoreProperties(value = {"animal","appointmentList"})
     @OneToMany(mappedBy = "animal",cascade = CascadeType.REMOVE)
     private List<Vaccine> vaccines;
 }

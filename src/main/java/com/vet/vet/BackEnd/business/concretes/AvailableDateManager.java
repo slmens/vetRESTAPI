@@ -3,7 +3,7 @@ package com.vet.vet.BackEnd.business.concretes;
 import com.vet.vet.BackEnd.business.abstracts.IAvailableDateService;
 import com.vet.vet.BackEnd.dao.AvailableDateRepository;
 import com.vet.vet.BackEnd.dao.DoctorRepository;
-import com.vet.vet.BackEnd.dto.requestDto.doctor.AvailableDateSaveDTO;
+import com.vet.vet.BackEnd.dto.requestDto.AvailableDateSaveDTO;
 import com.vet.vet.BackEnd.entities.AvailableDate;
 import com.vet.vet.BackEnd.entities.Doctor;
 import org.apache.velocity.exception.ResourceNotFoundException;

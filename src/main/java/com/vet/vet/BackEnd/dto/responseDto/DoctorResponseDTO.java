@@ -1,4 +1,4 @@
-package com.vet.vet.BackEnd.dto.responseDto.doctor;
+package com.vet.vet.BackEnd.dto.responseDto;
 
 import com.vet.vet.BackEnd.entities.Appointment;
 import com.vet.vet.BackEnd.entities.AvailableDate;

@@ -1,7 +1,8 @@
 package com.vet.vet.BackEnd.api;
 
 import com.vet.vet.BackEnd.business.concretes.VaccineManager;
-import com.vet.vet.BackEnd.dto.requestDto.doctor.VaccineSaveDTO;
+import com.vet.vet.BackEnd.dto.requestDto.VaccineSaveDTO;
+import com.vet.vet.BackEnd.dto.requestDto.VaccineUpdateDTO;
 import com.vet.vet.BackEnd.entities.Animal;
 import com.vet.vet.BackEnd.entities.Vaccine;
 import org.springframework.http.HttpStatus;
@@ -31,9 +32,8 @@ public class VaccineController {
         return this.vaccineManager.findAllByAnimalId(id);
     }
 
-    //Kullanıcının aşı koruyuculuk bitiş tarihi yaklaşan hayvanları listeleyebilmesi için gireceği başlangıç ve bitiş tarihlerine göre aşı koruyuculuk tarihi yaklaşan hayvanların listesini geri döndüren API end  point'ini oluşturmak.
 
-    @GetMapping("/animal/")
+    @GetMapping("/animal")
     @ResponseStatus(HttpStatus.OK)
     public List<Animal> findAllAnimalsThatNeedVaccine(@RequestParam("vaccineCode") String vaccineCode,@RequestParam("startDate")LocalDate startDate, @RequestParam("endDate") LocalDate endDate){
         return this.vaccineManager.findAllAnimalsThatNeedVaccine(vaccineCode,startDate,endDate);
@@ -48,8 +48,8 @@ public class VaccineController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Boolean update(@RequestBody VaccineSaveDTO vaccineSaveDTO, @PathVariable("id") Long id){
-        return this.vaccineManager.update(vaccineSaveDTO,id);
+    public Boolean update(@RequestBody VaccineUpdateDTO vaccineUpdateDTO, @PathVariable("id") Long id){
+        return this.vaccineManager.update(vaccineUpdateDTO,id);
     }
 
     @DeleteMapping("/{id}")

@@ -1,7 +1,7 @@
 package com.vet.vet.BackEnd.business.abstracts;
 
-import com.vet.vet.BackEnd.dto.requestDto.doctor.DoctorSaveDTO;
-import com.vet.vet.BackEnd.dto.responseDto.doctor.DoctorResponseDTO;
+import com.vet.vet.BackEnd.dto.requestDto.DoctorSaveDTO;
+import com.vet.vet.BackEnd.dto.responseDto.DoctorResponseDTO;
 
 import java.util.List;
 

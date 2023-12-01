@@ -1,6 +1,6 @@
 package com.vet.vet.BackEnd.business.abstracts;
 
-import com.vet.vet.BackEnd.dto.requestDto.doctor.AnimalSaveDTO;
+import com.vet.vet.BackEnd.dto.requestDto.AnimalSaveDTO;
 import com.vet.vet.BackEnd.entities.Animal;
 
 import java.util.List;

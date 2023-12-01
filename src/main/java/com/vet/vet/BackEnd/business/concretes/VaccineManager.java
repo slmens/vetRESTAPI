@@ -3,7 +3,8 @@ package com.vet.vet.BackEnd.business.concretes;
 import com.vet.vet.BackEnd.business.abstracts.IVaccineService;
 import com.vet.vet.BackEnd.dao.AnimalRepository;
 import com.vet.vet.BackEnd.dao.VaccineRepository;
-import com.vet.vet.BackEnd.dto.requestDto.doctor.VaccineSaveDTO;
+import com.vet.vet.BackEnd.dto.requestDto.VaccineSaveDTO;
+import com.vet.vet.BackEnd.dto.requestDto.VaccineUpdateDTO;
 import com.vet.vet.BackEnd.entities.Animal;
 import com.vet.vet.BackEnd.entities.Vaccine;
 import org.modelmapper.ModelMapper;
@@ -55,12 +56,15 @@ public class VaccineManager implements IVaccineService {
                 // This for loop iterates the VaccineList that animal have
                 // I start from the end and if I find the vaccine that has the code that I give in the parameters then
                 // I capture that vaccine
-                for (int j = animal.getVaccines().size() - 1; j<animal.getVaccines().size();j--){
-                    if (animal.getVaccines().get(j).getCode().equals(vaccineCode)){
-                        latestSameCodeVaccine = animal.getVaccines().get(j);
-                        break;
+                if (!animal.getVaccines().isEmpty()){
+                    for (int j = animal.getVaccines().size() - 1; j>= 0;j--){
+                        if (animal.getVaccines().get(j).getCode().equals(vaccineCode)){
+                            latestSameCodeVaccine = animal.getVaccines().get(j);
+                            break;
+                        }
                     }
                 }
+
 
                 /*
                     If the captured vaccine is null, it means that this animal has not had a vaccine with this code before,
@@ -72,7 +76,7 @@ public class VaccineManager implements IVaccineService {
                 if (latestSameCodeVaccine == null){
                     filteredAnimalList.add(animal);
                 }else{
-                    if (latestSameCodeVaccine.getProtectionEndDate().isAfter(startDate) && latestSameCodeVaccine.getProtectionEndDate().isBefore(endDate)){
+                    if ((latestSameCodeVaccine.getProtectionEndDate().isAfter(startDate) || latestSameCodeVaccine.getProtectionEndDate().equals(startDate)) && latestSameCodeVaccine.getProtectionEndDate().isBefore(endDate)){
                         filteredAnimalList.add(animal);
                     }
                 }
@@ -100,11 +104,12 @@ public class VaccineManager implements IVaccineService {
             List<Vaccine> vaccineList = animal.getVaccines();
             int listSize = vaccineList.size();
             Vaccine latestSameCodeVaccine = null;
-
-            for (int i = listSize - 1; i < listSize; i--){
-                if (Objects.equals(vaccineList.get(i).getCode(), vaccineSaveDTO.getCode())){
-                    latestSameCodeVaccine = vaccineList.get(i);
-                    break;
+            if (listSize != 0){
+                for (int i = listSize - 1; i>=0; i--){
+                    if (Objects.equals(vaccineList.get(i).getCode(), vaccineSaveDTO.getCode())){
+                        latestSameCodeVaccine = vaccineList.get(i);
+                        break;
+                    }
                 }
             }
 
@@ -133,7 +138,10 @@ public class VaccineManager implements IVaccineService {
             }
 
            // Turning my save dto to vaccine class
-            Vaccine vaccine = modelMapper.map(vaccineSaveDTO, Vaccine.class);
+            Vaccine vaccine = new Vaccine();
+            vaccine.setCode(vaccineSaveDTO.getCode());
+            vaccine.setProtectionStartDate(vaccineSaveDTO.getProtectionStartDate());
+            vaccine.setProtectionEndDate(vaccineSaveDTO.getProtectionEndDate());
             vaccine.setAnimal(animal);
 
             try {
@@ -152,9 +160,24 @@ public class VaccineManager implements IVaccineService {
     }
 
     @Override
-    public Boolean update(VaccineSaveDTO vaccineSaveDTO, Long id) {
-        // update için farklı dto yap tarihlere dokunamasın
-        return null;
+    public Boolean update(VaccineUpdateDTO vaccineUpdateDTO, Long id) {
+        // If the employee tries to change the animalId of the vaccine then we need to check if the new animal can have that vaccine same as save method.
+        Boolean result = false;
+        vaccineUpdateDTO.setId(id);
+
+        if(this.vaccineRepository.existsById(vaccineUpdateDTO.getId())){
+            Vaccine vaccine = this.vaccineRepository.findById(vaccineUpdateDTO.getId()).orElseThrow();
+            vaccine.setCode(vaccineUpdateDTO.getCode());
+            try {
+                this.vaccineRepository.save(vaccine);
+                result = true;
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+                return null;
+            }
+        }
+
+        return result;
     }
 
     @Override

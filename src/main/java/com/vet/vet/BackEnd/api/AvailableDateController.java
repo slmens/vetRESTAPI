@@ -1,7 +1,7 @@
 package com.vet.vet.BackEnd.api;
 
 import com.vet.vet.BackEnd.business.concretes.AvailableDateManager;
-import com.vet.vet.BackEnd.dto.requestDto.doctor.AvailableDateSaveDTO;
+import com.vet.vet.BackEnd.dto.requestDto.AvailableDateSaveDTO;
 import com.vet.vet.BackEnd.entities.AvailableDate;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

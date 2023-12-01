@@ -1,7 +1,9 @@
 package com.vet.vet.BackEnd.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,17 +22,18 @@ public class Vaccine {
     private Long id;
 
     @NotBlank
-    @Column(name = "vaccine_code",length = 100,unique = true)
+    @Column(name = "vaccine_code",length = 100)
     private String code;
 
-    @NotBlank
+    @NotNull
     @Column(name = "protection_start_date")
     private LocalDate protectionStartDate;
 
-    @NotBlank
+    @NotNull
     @Column(name = "protection_end_date")
     private LocalDate protectionEndDate;
 
+    @JsonIgnoreProperties(value = {"vaccines"})
     @ManyToOne
     @JoinColumn(name = "animal_id")
     private Animal animal;

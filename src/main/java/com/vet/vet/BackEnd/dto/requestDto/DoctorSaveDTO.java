@@ -1,4 +1,4 @@
-package com.vet.vet.BackEnd.dto.requestDto.doctor;
+package com.vet.vet.BackEnd.dto.requestDto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

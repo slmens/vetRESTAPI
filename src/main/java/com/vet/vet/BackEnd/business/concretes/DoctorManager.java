@@ -2,8 +2,8 @@ package com.vet.vet.BackEnd.business.concretes;
 
 import com.vet.vet.BackEnd.business.abstracts.IDoctorService;
 import com.vet.vet.BackEnd.dao.DoctorRepository;
-import com.vet.vet.BackEnd.dto.requestDto.doctor.DoctorSaveDTO;
-import com.vet.vet.BackEnd.dto.responseDto.doctor.DoctorResponseDTO;
+import com.vet.vet.BackEnd.dto.requestDto.DoctorSaveDTO;
+import com.vet.vet.BackEnd.dto.responseDto.DoctorResponseDTO;
 import com.vet.vet.BackEnd.entities.Doctor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

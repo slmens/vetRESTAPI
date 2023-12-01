@@ -3,7 +3,7 @@ package com.vet.vet.BackEnd.business.concretes;
 import com.vet.vet.BackEnd.business.abstracts.IAnimalService;
 import com.vet.vet.BackEnd.dao.AnimalRepository;
 import com.vet.vet.BackEnd.dao.CustomerRepository;
-import com.vet.vet.BackEnd.dto.requestDto.doctor.AnimalSaveDTO;
+import com.vet.vet.BackEnd.dto.requestDto.AnimalSaveDTO;
 import com.vet.vet.BackEnd.entities.Animal;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

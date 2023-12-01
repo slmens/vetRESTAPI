@@ -1,6 +1,6 @@
 package com.vet.vet.BackEnd.business.abstracts;
 
-import com.vet.vet.BackEnd.dto.requestDto.doctor.AvailableDateSaveDTO;
+import com.vet.vet.BackEnd.dto.requestDto.AvailableDateSaveDTO;
 import com.vet.vet.BackEnd.entities.AvailableDate;
 
 import java.util.List;

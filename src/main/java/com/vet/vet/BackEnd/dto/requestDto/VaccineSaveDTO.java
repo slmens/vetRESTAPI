@@ -1,4 +1,4 @@
-package com.vet.vet.BackEnd.dto.requestDto.doctor;
+package com.vet.vet.BackEnd.dto.requestDto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -10,25 +10,19 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class AnimalSaveDTO {
+public class VaccineSaveDTO {
 
     private Long id;
 
     @NotBlank
-    private String name;
+    private String code;
 
     @NotBlank
-    private String species;
-
-    private String breed;
-
-    private String gender;
+    private LocalDate protectionStartDate;
 
     @NotBlank
-    private String colour;
-
-    private LocalDate dateOfBirth;
+    private LocalDate protectionEndDate;
 
     @NotBlank
-    private Long customerID;
+    private Long animalID;
 }

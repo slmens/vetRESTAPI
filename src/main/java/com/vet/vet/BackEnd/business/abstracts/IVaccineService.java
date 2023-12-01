@@ -1,6 +1,7 @@
 package com.vet.vet.BackEnd.business.abstracts;
 
-import com.vet.vet.BackEnd.dto.requestDto.doctor.VaccineSaveDTO;
+import com.vet.vet.BackEnd.dto.requestDto.VaccineSaveDTO;
+import com.vet.vet.BackEnd.dto.requestDto.VaccineUpdateDTO;
 import com.vet.vet.BackEnd.entities.Animal;
 import com.vet.vet.BackEnd.entities.Vaccine;
 
@@ -12,6 +13,6 @@ public interface IVaccineService {
     List<Animal> findAllAnimalsThatNeedVaccine(String vaccineCode,LocalDate startDate, LocalDate endDate);
     Vaccine findById(Long id);
     Boolean save(VaccineSaveDTO vaccineSaveDTO);
-    Boolean update(VaccineSaveDTO vaccineSaveDTO,Long id);
+    Boolean update(VaccineUpdateDTO vaccineUpdateDTO, Long id);
     Boolean delete(Long id);
 }

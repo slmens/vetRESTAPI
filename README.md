@@ -1,3 +1,7 @@
+Değerlendirmeyi kolaylaştırmak amacıyla aldığım ssleri içeren pdf:
+[değerlendirmepdf.pdf](https://github.com/slmens/vetRESTAPI/files/13537075/degerlendirmepdf.pdf)
+
+
 Here is the UML Class Diagram of the project:
 ![vetUMLast](https://github.com/slmens/vetRESTAPI/assets/99343829/29457c1f-a8a1-41ee-9919-596272cae4bc)
 

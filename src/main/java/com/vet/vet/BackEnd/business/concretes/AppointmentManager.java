@@ -131,7 +131,6 @@ public class AppointmentManager implements IAppointmentService {
                         result.setHttpCode("201");
                     }catch (Exception e){
                         System.out.println(e.getMessage());
-                        return null;
                     }
                 }
             }

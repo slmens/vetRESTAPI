@@ -53,7 +53,7 @@ public class DoctorManager implements IDoctorService {
 
     @Override
     public Result save(DoctorSaveDTO doctorSaveDTO) {
-        Result result = new Result(false,"Available date couldn't saved!","400");
+        Result result = new Result(false,"Doctor couldn't saved!","400");
 
         try {
             Doctor doctor = modelMapper.map(doctorSaveDTO,Doctor.class);
@@ -78,7 +78,7 @@ public class DoctorManager implements IDoctorService {
 
     @Override
     public Result update(DoctorSaveDTO doctorSaveDTO,Long id) {
-        Result result = new Result(false,"Available date couldn't updated!","400");
+        Result result = new Result(false,"Doctor couldn't updated!","400");
 
 
         if (this.doctorRepository.existsById(id)){
@@ -108,7 +108,7 @@ public class DoctorManager implements IDoctorService {
     @Override
     public Result delete(Long id) {
         // If the result variable returns true, this means that no error occurred during the deletion process.
-        Result result = new Result(false,"Available date couldn't deleted!","400");
+        Result result = new Result(false,"Doctor couldn't deleted!","400");
 
         if (this.doctorRepository.existsById(id)){
             try {
@@ -121,7 +121,7 @@ public class DoctorManager implements IDoctorService {
                 System.out.println(e.getMessage());
             }
         }else{
-            throw  new RuntimeException(("there is no record with this id in database : " + id));
+            throw new RuntimeException(("there is no record with this id in database : " + id));
         }
 
         return result;

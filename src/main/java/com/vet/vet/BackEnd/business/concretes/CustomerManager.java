@@ -61,7 +61,7 @@ public class CustomerManager implements ICustomerService {
 
     @Override
     public Result update(Customer customer, Long id) {
-        Result result = new Result(false,"Available date couldn't updated!","400");
+        Result result = new Result(false,"Customer couldn't updated!","400");
 
 
         if (this.customerRepository.existsById(id)){
@@ -84,7 +84,7 @@ public class CustomerManager implements ICustomerService {
     @Override
     public Result delete(Long id) {
         // If the result variable returns true, this means that no error occurred during the deletion process.
-        Result result = new Result(false,"Available date couldn't deleted!","400");
+        Result result = new Result(false,"Customer couldn't deleted!","400");
 
         if (this.customerRepository.existsById(id)){
             try {

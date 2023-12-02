@@ -75,7 +75,8 @@ public class AnimalManager implements IAnimalService {
 
             try {
                 Animal animal = modelMapper.map(animalSaveDTO,Animal.class);
-                animal.setCustomer(this.customerRepository.findById(animalSaveDTO.getCustomerID()).orElseThrow(() -> new NotFoundException("The animal you wanted couldn't found!")));
+                animal.setId(id);
+                animal.setCustomer(this.customerRepository.findById(animalSaveDTO.getCustomerID()).orElseThrow(() -> new NotFoundException("The customer you wanted couldn't found!")));
                 this.animalRepository.save(animal);
 
                 result.setMessage("Animal updated successfully!");

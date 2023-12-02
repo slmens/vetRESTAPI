@@ -5,7 +5,6 @@ import com.vet.vet.BackEnd.dao.AnimalRepository;
 import com.vet.vet.BackEnd.dao.VaccineRepository;
 import com.vet.vet.BackEnd.dto.requestDto.VaccineSaveDTO;
 import com.vet.vet.BackEnd.dto.requestDto.VaccineUpdateDTO;
-import com.vet.vet.BackEnd.dto.responseDto.DoctorResponseDTO;
 import com.vet.vet.BackEnd.entities.Animal;
 import com.vet.vet.BackEnd.entities.Vaccine;
 import com.vet.vet.core.exception.NotFoundException;
@@ -33,11 +32,16 @@ public class VaccineManager implements IVaccineService {
 
     @Override
     public ResultData<List<Vaccine>> findAllByAnimalId(Long id) {
+        ResultData<List<Vaccine>> resultData = new ResultData<>(false,"Vaccine list couldn't found!","404",null);
 
         if (this.animalRepository.existsById(id)){
             Animal animal = animalRepository.findById(id).orElseThrow();
-            return new ResultData<>(true,"Animal vaccine list found!","200",animal.getVaccines());
+            resultData.setStatus(true);
+            resultData.setMessage("Vaccine list found!");
+            resultData.setHttpCode("200");
+            resultData.setData(animal.getVaccines());
         }
+        return resultData;
     }
 
     @Override

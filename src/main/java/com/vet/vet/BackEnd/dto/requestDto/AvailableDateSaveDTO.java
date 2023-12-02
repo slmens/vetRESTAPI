@@ -12,8 +12,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class AvailableDateSaveDTO {
 
-    private Long id;
-
     @NotBlank
     private LocalDate availableDate;
 

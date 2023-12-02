@@ -12,8 +12,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class VaccineSaveDTO {
 
-    private Long id;
-
     @NotBlank
     private String code;
 

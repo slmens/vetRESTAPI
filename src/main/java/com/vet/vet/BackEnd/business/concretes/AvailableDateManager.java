@@ -78,7 +78,6 @@ public class AvailableDateManager implements IAvailableDateService {
         Result result = new Result(false,"Available date couldn't updated!","400");
 
         if (this.availableDateRepository.existsById(id)){
-            availableDateSaveDTO.setId(id);
             if (this.doctorRepository.existsById(availableDateSaveDTO.getDoctorID())){
                 try{
                     Doctor doctor = this.doctorRepository.findById(availableDateSaveDTO.getDoctorID()).orElseThrow();
@@ -86,7 +85,7 @@ public class AvailableDateManager implements IAvailableDateService {
 
                     availableDate.setDoctor(doctor);
                     availableDate.setAvailableDate(availableDateSaveDTO.getAvailableDate());
-                    availableDate.setId(availableDateSaveDTO.getId());
+                    availableDate.setId(id);
                     System.out.println(availableDate.getDoctor().getId());
                     System.out.println(availableDate.getId());
 

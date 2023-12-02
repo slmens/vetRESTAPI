@@ -10,7 +10,6 @@ import com.vet.vet.BackEnd.entities.Vaccine;
 import com.vet.vet.core.exception.NotFoundException;
 import com.vet.vet.core.result.Result;
 import com.vet.vet.core.result.ResultData;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -22,12 +21,10 @@ import java.util.Objects;
 public class VaccineManager implements IVaccineService {
     private final VaccineRepository vaccineRepository;
     private final AnimalRepository animalRepository;
-    private final ModelMapper modelMapper;
 
-    public VaccineManager(VaccineRepository vaccineRepository, AnimalRepository animalRepository, ModelMapper modelMapper) {
+    public VaccineManager(VaccineRepository vaccineRepository, AnimalRepository animalRepository) {
         this.vaccineRepository = vaccineRepository;
         this.animalRepository = animalRepository;
-        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -147,7 +144,7 @@ public class VaccineManager implements IVaccineService {
                 }
 
             }else {
-                // There is no vaccine with that code before
+                // There is no vaccine with that code before, so we can make vaccine to that animal
             }
 
            // Turning my save dto to vaccine class

@@ -12,8 +12,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class AppointmentSaveDTO {
 
-    private Long id;
-
     @NotNull
     private LocalDateTime appointmentDate;
 

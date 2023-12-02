@@ -33,6 +33,7 @@ public class Vaccine {
     @Column(name = "protection_end_date")
     private LocalDate protectionEndDate;
 
+    @NotNull
     @JsonIgnoreProperties(value = {"vaccines"})
     @ManyToOne
     @JoinColumn(name = "animal_id")

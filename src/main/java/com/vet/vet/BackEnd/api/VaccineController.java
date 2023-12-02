@@ -34,13 +34,14 @@ public class VaccineController {
         return this.vaccineManager.findAllByAnimalId(id);
     }
 
-
     @GetMapping("/animal")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<List<Animal>> findAllAnimalsThatNeedVaccine(@RequestParam("vaccineCode") String vaccineCode,@RequestParam("startDate")LocalDate startDate, @RequestParam("endDate") LocalDate endDate){
+    public ResultData<List<Animal>> findAllAnimalsThatNeedVaccine(
+            @RequestParam("vaccineCode") String vaccineCode,
+            @RequestParam("startDate")LocalDate startDate,
+            @RequestParam("endDate") LocalDate endDate){
         return this.vaccineManager.findAllAnimalsThatNeedVaccine(vaccineCode,startDate,endDate);
     }
-
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)

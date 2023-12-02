@@ -36,13 +36,19 @@ public class AppointmentController {
 
     @GetMapping("/doctor")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<List<Appointment>> findByDoctorId(@RequestParam("doctorID") Long id, @RequestParam("firstDate")LocalDate firstDate, @RequestParam("secondDate")LocalDate secondDate){
+    public ResultData<List<Appointment>> findByDoctorId(
+            @RequestParam("doctorID") Long id,
+            @RequestParam("firstDate")LocalDate firstDate,
+            @RequestParam("secondDate")LocalDate secondDate){
         return this.appointmentManager.findAppointmentByDoctorIdAndDate(id,firstDate,secondDate);
     }
 
     @GetMapping("/animal")
     @ResponseStatus(HttpStatus.OK)
-    public ResultData<List<Appointment>> findByAnimalId(@RequestParam("animalID") Long id,@RequestParam("firstDate") LocalDate firstDate, @RequestParam("secondDate") LocalDate secondDate){
+    public ResultData<List<Appointment>> findByAnimalId(
+            @RequestParam("animalID") Long id,
+            @RequestParam("firstDate") LocalDate firstDate,
+            @RequestParam("secondDate") LocalDate secondDate){
         return this.appointmentManager.findAppointmentByAnimalIdAndDate(id,firstDate,secondDate);
     }
 

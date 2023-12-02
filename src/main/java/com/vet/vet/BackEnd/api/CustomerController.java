@@ -45,7 +45,7 @@ public class CustomerController {
     }
 
     @GetMapping("/animals/{id}")
-    public ResultData<List<Animal>>indAllAnimalByCustomerId(@PathVariable("id") Long id){
+    public ResultData<List<Animal>> findAllAnimalByCustomerId(@PathVariable("id") Long id){
         return this.customerManager.findAllAnimalsByCustomerId(id);
     }
 

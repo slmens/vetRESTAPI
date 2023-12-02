@@ -57,11 +57,11 @@ public class AppointmentManager implements IAppointmentService {
                 Doctor doctor = this.doctorRepository.findById(appointmentSaveDTO.getDoctorID()).orElseThrow();
                 List<AvailableDate> doctorWorkDays = doctor.getAvailableDates();
                 List<Appointment> doctorsAllAppointments = doctor.getAppointments();
+
                 AvailableDate wantedDay = null;
                 Appointment appointment = null;
 
                 wantedDay = doctorWorkDays.stream().filter(availableDate -> availableDate.getAvailableDate().equals(appointmentSaveDTO.getAppointmentDate().toLocalDate())).findFirst().orElse(null);
-
 
                 if (wantedDay == null){
                     throw new RuntimeException("The doctor is not working on this date!");
@@ -74,6 +74,7 @@ public class AppointmentManager implements IAppointmentService {
                         try {
                             Appointment appointmentToBeCreated = new Appointment();
                             appointmentToBeCreated.setAppointmentDate(appointmentSaveDTO.getAppointmentDate());
+
                             appointmentToBeCreated.setDoctor(this.doctorRepository.findById(appointmentSaveDTO.getDoctorID()).orElseThrow());
                             appointmentToBeCreated.setAnimal(this.animalRepository.findById(appointmentSaveDTO.getAnimalID()).orElseThrow());
 
@@ -157,13 +158,11 @@ public class AppointmentManager implements IAppointmentService {
     public ResultData<List<Appointment>> findAppointmentByDoctorIdAndDate(Long doctorID, LocalDate firstDate, LocalDate secondDate) {
         ResultData<List<Appointment>> resultData = new ResultData<>(false,"Appointment list by doctor id couldn't found!","404",null);
         if (this.doctorRepository.existsById(doctorID)){
-            // Önce istenen doktorun bütün appointmentlarını çağır
-            // sonra o appointmentları tek tek gez ve istenen iki tarih arasındaki bütün randevularını başka bir listeye al ve onu dön
-            // çalışan kişi bu randevulara bakacak ve müşteriye boş günleri söyelyip yani bu randevular dışındaki zamanları söyleyip randevu oluşturacak
 
             List<Appointment> allAppointmentsOfDoctor = this.doctorRepository.findById(doctorID).orElseThrow().getAppointments();
 
-            List<Appointment> appointmentsBetweenGivenDates = allAppointmentsOfDoctor.stream().filter(appointment -> appointment.getAppointmentDate().isAfter(firstDate.atStartOfDay()) && appointment.getAppointmentDate().isBefore(secondDate.atStartOfDay())).toList();
+            List<Appointment> appointmentsBetweenGivenDates = allAppointmentsOfDoctor.stream().filter(appointment -> appointment.getAppointmentDate().
+                    isAfter(firstDate.atStartOfDay()) && appointment.getAppointmentDate().isBefore(secondDate.atStartOfDay())).toList();
 
             resultData.setStatus(true);
             resultData.setMessage("Appointment list by doctor id found!");
@@ -183,7 +182,8 @@ public class AppointmentManager implements IAppointmentService {
             // Amaç : verilen tarihler arasındaki belirli bir hayvanın randevularını görmek
             List<Appointment> allAppointmentsOfAnimal = this.animalRepository.findById(animalID).orElseThrow().getAppointmentList();
 
-            List<Appointment> appointmentsBetweenGivenDates = allAppointmentsOfAnimal.stream().filter(appointment -> appointment.getAppointmentDate().isAfter(firstDate.atStartOfDay()) && appointment.getAppointmentDate().isBefore(secondDate.atStartOfDay())).toList();
+            List<Appointment> appointmentsBetweenGivenDates = allAppointmentsOfAnimal.stream().filter(appointment -> appointment.getAppointmentDate().
+                    isAfter(firstDate.atStartOfDay()) && appointment.getAppointmentDate().isBefore(secondDate.atStartOfDay())).toList();
 
             resultData.setStatus(true);
             resultData.setMessage("Appointment list by animal id found!");

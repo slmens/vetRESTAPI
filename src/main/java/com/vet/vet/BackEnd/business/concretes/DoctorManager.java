@@ -5,6 +5,8 @@ import com.vet.vet.BackEnd.dao.DoctorRepository;
 import com.vet.vet.BackEnd.dto.requestDto.DoctorSaveDTO;
 import com.vet.vet.BackEnd.dto.responseDto.DoctorResponseDTO;
 import com.vet.vet.BackEnd.entities.Doctor;
+import com.vet.vet.core.result.Result;
+import com.vet.vet.core.result.ResultData;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -22,53 +24,61 @@ public class DoctorManager implements IDoctorService {
     }
 
     @Override
-    public List<DoctorResponseDTO> findAll() {
+    public ResultData<List<DoctorResponseDTO>> findAll() {
         List<DoctorResponseDTO> doctorResponseDTOS = new ArrayList<>();
         List<Doctor> doctorList = this.doctorRepository.findAll();
         doctorList.forEach(item -> doctorResponseDTOS.add(modelMapper.map(item,DoctorResponseDTO.class)));
 
-        return doctorResponseDTOS;
+        return new ResultData<>(true, "Doctor list found!", "200", doctorResponseDTOS);
     }
 
     @Override
-    public DoctorResponseDTO findById(Long id) {
+    public ResultData<DoctorResponseDTO> findById(Long id) {
+        ResultData<DoctorResponseDTO> resultData = new ResultData<>(false,"Doctor is not found!","404",null);
+
         try {
             Doctor doctor = this.doctorRepository.findById(id).orElseThrow();
             DoctorResponseDTO doctorResponseDTO = modelMapper.map(doctor, DoctorResponseDTO.class);
-            return doctorResponseDTO;
-        }catch (Exception e){
 
+            resultData.setStatus(true);
+            resultData.setMessage("Doctor is found!");
+            resultData.setHttpCode("200");
+            resultData.setData(doctorResponseDTO);
+        }catch (Exception e){
+            System.out.println(e.getMessage());
         }
 
-        // appointment ve available date çekip buna ver sonra return et
-        return null;
+        return resultData;
     }
 
     @Override
-    public Boolean save(DoctorSaveDTO doctorSaveDTO) {
-        Boolean result = false;
+    public Result save(DoctorSaveDTO doctorSaveDTO) {
+        Result result = new Result(false,"Available date couldn't saved!","400");
 
         try {
             Doctor doctor = modelMapper.map(doctorSaveDTO,Doctor.class);
             doctor.setAppointments(null);
             doctor.setAvailableDates(null);
 
-            Doctor pseudoDoc = this.doctorRepository.save(doctor);
+            try {
+                this.doctorRepository.save(doctor);
 
-            if (pseudoDoc.getClass() == Doctor.class){
-                result = true;
+                result.setStatus(true);
+                result.setMessage("Doctor saved!");
+                result.setHttpCode("201");
+            }catch (Exception e){
+                System.out.println(e.getMessage());
             }
 
-            return result;
         }catch (Exception e){
             System.out.println(e.getMessage());
-            return result;
         }
+        return result;
     }
 
     @Override
-    public Boolean update(DoctorSaveDTO doctorSaveDTO,Long id) {
-        Boolean result = false;
+    public Result update(DoctorSaveDTO doctorSaveDTO,Long id) {
+        Result result = new Result(false,"Available date couldn't updated!","400");
 
 
         if (this.doctorRepository.existsById(id)){
@@ -77,16 +87,18 @@ public class DoctorManager implements IDoctorService {
             try {
                 Doctor doctor = modelMapper.map(doctorSaveDTO,Doctor.class);
 
-                Doctor pseudoDoc = this.doctorRepository.save(doctor);
+                try {
+                    this.doctorRepository.save(doctor);
 
-                if (pseudoDoc.getClass() == Doctor.class){
-                    result = true;
+                    result.setStatus(true);
+                    result.setMessage("Doctor updated!");
+                    result.setHttpCode("201");
+
+                }catch (Exception e){
+                    System.out.println(e.getMessage());
                 }
-
-                return result;
             }catch (Exception e){
                 System.out.println(e.getMessage());
-                return result;
             }
         }
 
@@ -94,14 +106,17 @@ public class DoctorManager implements IDoctorService {
     }
 
     @Override
-    public Boolean delete(Long id) {
+    public Result delete(Long id) {
         // If the result variable returns true, this means that no error occurred during the deletion process.
-        Boolean result = false;
+        Result result = new Result(false,"Available date couldn't deleted!","400");
 
         if (this.doctorRepository.existsById(id)){
             try {
                 this.doctorRepository.deleteById(id);
-                result = true;
+                result.setStatus(true);
+                result.setMessage("Doctor deleted!");
+                result.setHttpCode("204");
+
             }catch (Exception e){
                 System.out.println(e.getMessage());
             }

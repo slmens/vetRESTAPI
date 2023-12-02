@@ -49,6 +49,7 @@ public class Animal {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
+    @JsonIgnoreProperties(value = {"animal"})
     @OneToMany(mappedBy = "animal")
     private List<Appointment> appointmentList;
 

@@ -3,6 +3,8 @@ package com.vet.vet.BackEnd.api;
 import com.vet.vet.BackEnd.business.concretes.DoctorManager;
 import com.vet.vet.BackEnd.dto.requestDto.DoctorSaveDTO;
 import com.vet.vet.BackEnd.dto.responseDto.DoctorResponseDTO;
+import com.vet.vet.core.result.Result;
+import com.vet.vet.core.result.ResultData;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,32 +21,31 @@ public class DoctorController {
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public DoctorResponseDTO findById(@PathVariable("id") Long id){
+    public ResultData<DoctorResponseDTO> findById(@PathVariable("id") Long id){
         return this.doctorManager.findById(id);
     }
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public List<DoctorResponseDTO> findAll(){
-        List<DoctorResponseDTO> doctorResponseDTOS = this.doctorManager.findAll();
-        return doctorResponseDTOS;
+    public ResultData<List<DoctorResponseDTO>> findAll(){
+        return this.doctorManager.findAll();
     }
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
-    public Boolean save(@RequestBody DoctorSaveDTO doctorSaveDTO){
+    public Result save(@RequestBody DoctorSaveDTO doctorSaveDTO){
         return this.doctorManager.save(doctorSaveDTO);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Boolean update(@RequestBody DoctorSaveDTO doctorSaveDTO, @PathVariable("id") Long id){
+    public Result update(@RequestBody DoctorSaveDTO doctorSaveDTO, @PathVariable("id") Long id){
         return this.doctorManager.update(doctorSaveDTO,id);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Boolean delete(@PathVariable("id") Long id){
+    public Result delete(@PathVariable("id") Long id){
         return this.doctorManager.delete(id);
     }
 }

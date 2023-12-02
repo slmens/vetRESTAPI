@@ -3,6 +3,8 @@ package com.vet.vet.BackEnd.api;
 import com.vet.vet.BackEnd.business.concretes.CustomerManager;
 import com.vet.vet.BackEnd.entities.Animal;
 import com.vet.vet.BackEnd.entities.Customer;
+import com.vet.vet.core.result.Result;
+import com.vet.vet.core.result.ResultData;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,37 +20,37 @@ public class CustomerController {
     }
 
     @GetMapping("")
-    public List<Customer> findAll(){
+    public ResultData<List<Customer>> findAll(){
         return this.customerManager.findAll();
     }
 
     @GetMapping("/{id}")
-    public Customer findById(@PathVariable("id") Long id){
+    public ResultData<Customer> findById(@PathVariable("id") Long id){
         return this.customerManager.findById(id);
     }
 
     @PostMapping("/save")
-    public Boolean save(@RequestBody Customer customer){
+    public Result save(@RequestBody Customer customer){
         return this.customerManager.save(customer);
     }
 
     @PutMapping("/{id}")
-    public Boolean update(@RequestBody Customer customer, @PathVariable("id") Long id){
+    public Result update(@RequestBody Customer customer, @PathVariable("id") Long id){
         return this.customerManager.update(customer,id);
     }
 
     @DeleteMapping("/{id}")
-    public Boolean delete(@PathVariable("id") Long id){
+    public Result delete(@PathVariable("id") Long id){
         return this.customerManager.delete(id);
     }
 
     @GetMapping("/animals/{id}")
-    public List<Animal> findAllAnimalByCustomerId(@PathVariable("id") Long id){
+    public ResultData<List<Animal>>indAllAnimalByCustomerId(@PathVariable("id") Long id){
         return this.customerManager.findAllAnimalsByCustomerId(id);
     }
 
     @GetMapping("/customer/{name}")
-    public List<Customer> findByName(@PathVariable("name") String name){
+    public ResultData<List<Customer>> findByName(@PathVariable("name") String name){
         return this.customerManager.findByName(name);
     }
 

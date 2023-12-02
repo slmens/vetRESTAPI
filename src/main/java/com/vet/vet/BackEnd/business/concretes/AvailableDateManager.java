@@ -6,6 +6,8 @@ import com.vet.vet.BackEnd.dao.DoctorRepository;
 import com.vet.vet.BackEnd.dto.requestDto.AvailableDateSaveDTO;
 import com.vet.vet.BackEnd.entities.AvailableDate;
 import com.vet.vet.BackEnd.entities.Doctor;
+import com.vet.vet.core.result.Result;
+import com.vet.vet.core.result.ResultData;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -25,26 +27,31 @@ public class AvailableDateManager implements IAvailableDateService {
     }
 
     @Override
-    public List<AvailableDate> findAll() {
-        return this.availableDateRepository.findAll();
+    public ResultData<List<AvailableDate>> findAll() {
+        ResultData<List<AvailableDate>> resultData = new ResultData<>(true,"Available date list found!","200",this.availableDateRepository.findAll());
+        return resultData;
     }
 
     @Override
-    public AvailableDate findById(Long id) {
-
+    public ResultData<AvailableDate> findById(Long id) {
+        ResultData<AvailableDate> resultData = new ResultData<>(false,"Available date couldn't found!","404",null);
         try {
-            return this.availableDateRepository.findById(id).orElseThrow(() ->  new ResourceNotFoundException("AvailableDate not found with id: " + id));
+            AvailableDate availableDate = this.availableDateRepository.findById(id).orElseThrow(() ->  new ResourceNotFoundException("AvailableDate not found with id: " + id));
+            resultData.setHttpCode("200");
+            resultData.setMessage("Available date found!");
+            resultData.setData(availableDate);
+            resultData.setStatus(true);
         }catch (ResourceNotFoundException e){
             System.out.println(e.getMessage());;
         }
 
-        return null;
+        return resultData;
     }
 
     @Override
-    public Boolean save(AvailableDateSaveDTO availableDateSaveDTO) {
+    public Result save(AvailableDateSaveDTO availableDateSaveDTO) {
         AvailableDate availableDate = new AvailableDate();
-        Boolean result = false;
+        Result result = new Result(false,"Available date couldn't saved!","400");
 
         if (this.doctorRepository.existsById(availableDateSaveDTO.getDoctorID())){
             try{
@@ -53,10 +60,11 @@ public class AvailableDateManager implements IAvailableDateService {
                 availableDate.setAvailableDate(availableDateSaveDTO.getAvailableDate());
                 try {
                     this.availableDateRepository.save(availableDate);
-                    result = true;
+                    result.setHttpCode("201");
+                    result.setMessage("Available date saved!");
+                    result.setStatus(true);
                 }catch (Exception e){
                     System.out.println(e.getMessage());
-                    return false;
                 }
             }catch (Exception e){
                 System.out.println(e.getMessage());
@@ -66,8 +74,8 @@ public class AvailableDateManager implements IAvailableDateService {
     }
 
     @Override
-    public Boolean update(AvailableDateSaveDTO availableDateSaveDTO,Long id) {
-        Boolean result = false;
+    public Result update(AvailableDateSaveDTO availableDateSaveDTO,Long id) {
+        Result result = new Result(false,"Available date couldn't updated!","400");
 
         if (this.availableDateRepository.existsById(id)){
             availableDateSaveDTO.setId(id);
@@ -84,10 +92,11 @@ public class AvailableDateManager implements IAvailableDateService {
 
                     try {
                         this.availableDateRepository.save(availableDate);
-                        result = true;
+                        result.setHttpCode("201");
+                        result.setMessage("Available date updated!");
+                        result.setStatus(true);
                     }catch (Exception e){
                         System.out.println(e.getMessage());
-                        return false;
                     }
                 }catch (Exception e){
                     System.out.println(e.getMessage());
@@ -98,14 +107,16 @@ public class AvailableDateManager implements IAvailableDateService {
     }
 
     @Override
-    public Boolean delete(Long id) {
-        Boolean result = false;
+    public Result delete(Long id) {
+        Result result = new Result(false,"Available date couldn't deleted!","400");
         if (this.availableDateRepository.existsById(id)){
             try {
                 this.availableDateRepository.deleteById(id);
-                result = true;
+                result.setHttpCode("204");
+                result.setMessage("Available date deleted!");
+                result.setStatus(true);
             }catch (Exception e){
-                return null;
+                System.out.println(e.getMessage());
             }
         }else{
             throw  new RuntimeException(("there is no record with this id in database : " + id));

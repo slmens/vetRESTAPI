@@ -5,8 +5,12 @@ import com.vet.vet.BackEnd.dao.AnimalRepository;
 import com.vet.vet.BackEnd.dao.VaccineRepository;
 import com.vet.vet.BackEnd.dto.requestDto.VaccineSaveDTO;
 import com.vet.vet.BackEnd.dto.requestDto.VaccineUpdateDTO;
+import com.vet.vet.BackEnd.dto.responseDto.DoctorResponseDTO;
 import com.vet.vet.BackEnd.entities.Animal;
 import com.vet.vet.BackEnd.entities.Vaccine;
+import com.vet.vet.core.exception.NotFoundException;
+import com.vet.vet.core.result.Result;
+import com.vet.vet.core.result.ResultData;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -28,20 +32,19 @@ public class VaccineManager implements IVaccineService {
     }
 
     @Override
-    public List<Vaccine> findAllByAnimalId(Long id) {
+    public ResultData<List<Vaccine>> findAllByAnimalId(Long id) {
 
         if (this.animalRepository.existsById(id)){
             Animal animal = animalRepository.findById(id).orElseThrow();
-            return animal.getVaccines();
+            return new ResultData<>(true,"Animal vaccine list found!","200",animal.getVaccines());
         }
-
-        return null;
     }
 
     @Override
-    public List<Animal> findAllAnimalsThatNeedVaccine(String vaccineCode,LocalDate startDate, LocalDate endDate) {
+    public ResultData<List<Animal>> findAllAnimalsThatNeedVaccine(String vaccineCode,LocalDate startDate, LocalDate endDate) {
         //First, I will fetch all the animals from the database. Then, I will go through each animal and their vaccination list
         // one by one and find the vaccine with the code I want and check if the expiration date of that vaccine is in the range I want.
+
         List<Animal> filteredAnimalList = new ArrayList<>();
 
         List<Animal> animalList = this.animalRepository.findAll();
@@ -83,20 +86,26 @@ public class VaccineManager implements IVaccineService {
             }
         }
 
-        return filteredAnimalList;
+        return new ResultData<>(true,"Animal list found!","200",filteredAnimalList);
     }
 
     @Override
-    public Vaccine findById(Long id) {
+    public ResultData<Vaccine> findById(Long id) {
+        ResultData<Vaccine> resultData = new ResultData<>(false,"Vaccine couldn't found!","404",null);
+
         if (this.vaccineRepository.existsById(id)){
-            return this.vaccineRepository.findById(id).orElseThrow();
+            resultData.setStatus(true);
+            resultData.setMessage("Vaccine found!");
+            resultData.setHttpCode("200");
+            resultData.setData(this.vaccineRepository.findById(id).orElseThrow(() -> new NotFoundException("Vaccine couldn't found!")));
         }
-        return null;
+        return resultData;
     }
 
     @Override
-    public Boolean save(VaccineSaveDTO vaccineSaveDTO) {
-        Boolean result = false;
+    public Result save(VaccineSaveDTO vaccineSaveDTO) {
+        Result result = new Result(false,"Vaccine couldn't saved!","400");
+
         if (this.animalRepository.existsById(vaccineSaveDTO.getAnimalID())){
             Animal animal = this.animalRepository.findById(vaccineSaveDTO.getAnimalID()).orElseThrow();
 
@@ -146,11 +155,12 @@ public class VaccineManager implements IVaccineService {
 
             try {
                 this.vaccineRepository.save(vaccine);
-                result = true;
+                result.setStatus(true);
+                result.setMessage("Vaccine saved!");
+                result.setHttpCode("201");
 
             }catch (Exception e){
                 System.out.println(e.getMessage());
-                return null;
             }
 
         }else{
@@ -160,9 +170,9 @@ public class VaccineManager implements IVaccineService {
     }
 
     @Override
-    public Boolean update(VaccineUpdateDTO vaccineUpdateDTO, Long id) {
+    public Result update(VaccineUpdateDTO vaccineUpdateDTO, Long id) {
         // If the employee tries to change the animalId of the vaccine then we need to check if the new animal can have that vaccine same as save method.
-        Boolean result = false;
+        Result result = new Result(false,"Vaccine couldn't updated!","400");
         vaccineUpdateDTO.setId(id);
 
         if(this.vaccineRepository.existsById(vaccineUpdateDTO.getId())){
@@ -170,10 +180,11 @@ public class VaccineManager implements IVaccineService {
             vaccine.setCode(vaccineUpdateDTO.getCode());
             try {
                 this.vaccineRepository.save(vaccine);
-                result = true;
+                result.setStatus(true);
+                result.setMessage("Vaccine updated!");
+                result.setHttpCode("201");
             }catch (Exception e){
                 System.out.println(e.getMessage());
-                return null;
             }
         }
 
@@ -181,12 +192,15 @@ public class VaccineManager implements IVaccineService {
     }
 
     @Override
-    public Boolean delete(Long id) {
-        Boolean result = false;
+    public Result delete(Long id) {
+        Result result = new Result(false,"Vaccine couldn't deleted!","400");
+
         if (this.vaccineRepository.existsById(id)){
             try {
                 this.vaccineRepository.deleteById(id);
-                result = true;
+                result.setStatus(true);
+                result.setMessage("Vaccine deleted!");
+                result.setHttpCode("204");
             }catch (Exception e){
                 System.out.println(e.getMessage());
             }

@@ -4,6 +4,8 @@ import com.vet.vet.BackEnd.business.abstracts.ICustomerService;
 import com.vet.vet.BackEnd.dao.CustomerRepository;
 import com.vet.vet.BackEnd.entities.Animal;
 import com.vet.vet.BackEnd.entities.Customer;
+import com.vet.vet.core.result.Result;
+import com.vet.vet.core.result.ResultData;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,28 +23,35 @@ public class CustomerManager implements ICustomerService {
 
 
     @Override
-    public List<Customer> findAll() {
-        return this.customerRepository.findAll();
+    public ResultData<List<Customer>> findAll() {
+        ResultData<List<Customer>> resultData = new ResultData<>(true,"Customer list found!","200",this.customerRepository.findAll());
+        return resultData;
     }
 
     @Override
-    public Customer findById(Long id) {
+    public ResultData<Customer> findById(Long id) {
+        ResultData<Customer> resultData = new ResultData<>(false,"Customer not found!","404",null);
         try{
-            return this.customerRepository.findById(id).orElseThrow();
+            Customer customer = this.customerRepository.findById(id).orElseThrow();
+            resultData.setStatus(true);
+            resultData.setData(customer);
+            resultData.setMessage("Customer found!");
+            resultData.setHttpCode("200");
         }catch (Exception e){
             System.out.println(e.getMessage());
-            return null;
         }
+        return resultData;
     }
 
     @Override
-    public Boolean save(Customer customer) {
-        Boolean result = false;
+    public Result save(Customer customer) {
+        Result result = new Result(false,"Customer couldn't saved!","400");
 
         try {
             this.customerRepository.save(customer);
-            result = true;
-
+            result.setStatus(true);
+            result.setMessage("Customer saved!");
+            result.setHttpCode("201");
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -51,8 +60,8 @@ public class CustomerManager implements ICustomerService {
     }
 
     @Override
-    public Boolean update(Customer customer, Long id) {
-        Boolean result = false;
+    public Result update(Customer customer, Long id) {
+        Result result = new Result(false,"Available date couldn't updated!","400");
 
 
         if (this.customerRepository.existsById(id)){
@@ -61,25 +70,28 @@ public class CustomerManager implements ICustomerService {
             try {
                 this.customerRepository.save(customer);
 
-                result = true;
+                result.setStatus(true);
+                result.setMessage("Customer updated!");
+                result.setHttpCode("201");
 
             }catch (Exception e){
                 System.out.println(e.getMessage());
             }
         }
-
         return result;
     }
 
     @Override
-    public Boolean delete(Long id) {
+    public Result delete(Long id) {
         // If the result variable returns true, this means that no error occurred during the deletion process.
-        Boolean result = false;
+        Result result = new Result(false,"Available date couldn't deleted!","400");
 
         if (this.customerRepository.existsById(id)){
             try {
                 this.customerRepository.deleteById(id);
-                result = true;
+                result.setStatus(true);
+                result.setMessage("Customer deleted!");
+                result.setHttpCode("204");
             }catch (Exception e){
                 System.out.println(e.getMessage());
             }
@@ -91,16 +103,26 @@ public class CustomerManager implements ICustomerService {
     }
 
     @Override
-    public List<Animal> findAllAnimalsByCustomerId(Long id) {
-        return this.animalManager.findAllAnimalsByCustomerId(id);
+    public ResultData<List<Animal>> findAllAnimalsByCustomerId(Long id) {
+        ResultData<List<Animal>> resultData = new ResultData<>(false,"Animal list not found!","404",null);
+
+        if (this.customerRepository.existsById(id)){
+            resultData.setHttpCode("200");
+            resultData.setMessage("Animal list found!");
+            resultData.setStatus(true);
+            resultData.setData(this.animalManager.findAllAnimalsByCustomerId(id));
+        }
+        return resultData ;
     }
 
     @Override
-    public List<Customer> findByName(String name) {
+    public ResultData<List<Customer>> findByName(String name) {
         List<Customer> allCustomers = this.customerRepository.findAll();
 
         List<Customer> filteredCustomers = allCustomers.stream().filter(customer -> name.equals(customer.getName())).collect(Collectors.toList());
 
-        return filteredCustomers;
+        ResultData<List<Customer>> resultData = new ResultData<>(true,"Customer list found!","200",filteredCustomers);
+
+        return resultData;
     }
 }

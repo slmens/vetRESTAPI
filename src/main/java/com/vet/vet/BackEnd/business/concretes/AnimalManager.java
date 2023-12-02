@@ -6,6 +6,7 @@ import com.vet.vet.BackEnd.dao.CustomerRepository;
 import com.vet.vet.BackEnd.dto.requestDto.AnimalSaveDTO;
 import com.vet.vet.BackEnd.entities.Animal;
 import com.vet.vet.core.exception.NotFoundException;
+import com.vet.vet.core.result.Result;
 import com.vet.vet.core.result.ResultData;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -28,13 +29,19 @@ public class AnimalManager implements IAnimalService {
 
     @Override
     public ResultData<List<Animal>> findAll() {
-        return this.animalRepository.findAll();
+
+        List<Animal> animalList = this.animalRepository.findAll();
+
+        ResultData<List<Animal>> resultData = new ResultData<>(true,"Animal list!","200",animalList);
+        return resultData;
     }
 
     @Override
-    public Animal findById(Long id) {
+    public ResultData<Animal> findById(Long id) {
         try{
-            return this.animalRepository.findById(id).orElseThrow();
+            Animal animal = this.animalRepository.findById(id).orElseThrow(() -> new NotFoundException("Animal not found in database!"));
+            ResultData<Animal> resultData = new ResultData<>(true,"Animal","200",animal);
+            return resultData;
         }catch (Exception e){
             System.out.println(e.getMessage());
             return null;
@@ -42,15 +49,16 @@ public class AnimalManager implements IAnimalService {
     }
 
     @Override
-    public Boolean save(AnimalSaveDTO animalSaveDTO) {
-        Boolean result = false;
-
+    public Result save(AnimalSaveDTO animalSaveDTO) {
+        Result result = new Result(false,"Animal couldn't saved!","404");
         try {
             Animal animal = modelMapper.map(animalSaveDTO,Animal.class);
             animal.setCustomer(this.customerRepository.findById(animalSaveDTO.getCustomerID()).orElseThrow());
             this.animalRepository.save(animal);
-            result = true;
 
+            result.setMessage("Animal saved successfully!");
+            result.setHttpCode("201");
+            result.setStatus(true);
         }catch (Exception e){
             System.out.println(e.getMessage());
         }
@@ -59,8 +67,8 @@ public class AnimalManager implements IAnimalService {
     }
 
     @Override
-    public Boolean update(AnimalSaveDTO animalSaveDTO, Long id) {
-        Boolean result = false;
+    public Result update(AnimalSaveDTO animalSaveDTO, Long id) {
+        Result result = new Result(false,"Animal couldn't updated!","404");
 
 
         if (this.animalRepository.existsById(id)){
@@ -70,7 +78,9 @@ public class AnimalManager implements IAnimalService {
                 animal.setCustomer(this.customerRepository.findById(animalSaveDTO.getCustomerID()).orElseThrow(() -> new NotFoundException("The animal you wanted couldn't found!")));
                 this.animalRepository.save(animal);
 
-                result = true;
+                result.setMessage("Animal updated successfully!");
+                result.setHttpCode("200");
+                result.setStatus(true);
 
             }catch (Exception e){
                 System.out.println(e.getMessage());
@@ -81,14 +91,17 @@ public class AnimalManager implements IAnimalService {
     }
 
     @Override
-    public Boolean delete(Long id) {
+    public Result delete(Long id) {
         // If the result variable returns true, this means that no error occurred during the deletion process.
-        Boolean result = false;
+        Result result = new Result(false,"Animal couldn't deleted","204");
 
         if (this.animalRepository.existsById(id)){
             try {
                 this.animalRepository.deleteById(id);
-                result = true;
+
+                result.setMessage("Animal deleted successfully!");
+                result.setHttpCode("200");
+                result.setStatus(true);
             }catch (Exception e){
                 System.out.println(e.getMessage());
             }
@@ -106,11 +119,14 @@ public class AnimalManager implements IAnimalService {
     }
 
     @Override
-    public List<Animal> findByName(String name) {
+    public ResultData<List<Animal>> findByName(String name) {
+
         List<Animal> allAnimals = this.animalRepository.findAll();
 
         List<Animal> filteredAnimals = allAnimals.stream().filter(animal -> name.equals(animal.getName())).collect(Collectors.toList());
 
-        return filteredAnimals;
+        ResultData<List<Animal>> resultData = new ResultData<>(true,"Animal list by animal name","200",filteredAnimals);
+
+        return resultData;
     }
 }

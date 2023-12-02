@@ -9,6 +9,9 @@ import com.vet.vet.BackEnd.dto.requestDto.AppointmentUpdateDTO;
 import com.vet.vet.BackEnd.entities.Appointment;
 import com.vet.vet.BackEnd.entities.AvailableDate;
 import com.vet.vet.BackEnd.entities.Doctor;
+import com.vet.vet.core.exception.NotFoundException;
+import com.vet.vet.core.result.Result;
+import com.vet.vet.core.result.ResultData;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -27,21 +30,27 @@ public class AppointmentManager implements IAppointmentService {
     }
 
     @Override
-    public Appointment findById(Long id) {
+    public ResultData<Appointment> findById(Long id) {
+        ResultData<Appointment> resultData = new ResultData<>(false,"Appointment couldn't found!","404",null);
         if (this.appointmentRepository.existsById(id)){
-            return this.appointmentRepository.findById(id).orElseThrow();
+            Appointment appointment = this.appointmentRepository.findById(id).orElseThrow(() -> new NotFoundException("Appointment couldn't found!"));
+            resultData.setStatus(true);
+            resultData.setMessage("Appointment found!");
+            resultData.setHttpCode("200");
+            resultData.setData(appointment);
         }
-        return null;
+        return resultData;
     }
 
     @Override
-    public List<Appointment> findAll() {
-        return this.appointmentRepository.findAll();
+    public ResultData<List<Appointment>> findAll() {
+        ResultData<List<Appointment>> resultData = new ResultData<>(true,"Appointment list found!","200",this.appointmentRepository.findAll());
+        return resultData;
     }
 
     @Override
-    public Boolean save(AppointmentSaveDTO appointmentSaveDTO) {
-        Boolean result = false;
+    public Result save(AppointmentSaveDTO appointmentSaveDTO) {
+        Result result = new Result(false,"Appointment couldn't saved!","400");
 
         if (this.doctorRepository.existsById(appointmentSaveDTO.getDoctorID())){
             if (this.animalRepository.existsById(appointmentSaveDTO.getAnimalID())){
@@ -70,7 +79,9 @@ public class AppointmentManager implements IAppointmentService {
 
                             this.appointmentRepository.save(appointmentToBeCreated);
 
-                            result = true;
+                            result.setHttpCode("201");
+                            result.setStatus(true);
+                            result.setMessage("Appointment saved!");
                         }catch (Exception e){
                             System.out.println(e.getMessage());
                         }
@@ -86,8 +97,9 @@ public class AppointmentManager implements IAppointmentService {
     }
 
     @Override
-    public Boolean update(AppointmentUpdateDTO appointmentUpdateDTO, Long id) {
-        Boolean result = false;
+    public Result update(AppointmentUpdateDTO appointmentUpdateDTO, Long id) {
+        Result result = new Result(false,"Appointment couldn't updated!","400");
+
         if (this.appointmentRepository.existsById(id)){
             Appointment previousAppointment = this.appointmentRepository.findById(id).orElseThrow();
             List<AvailableDate> doctorsWorkDays = previousAppointment.getDoctor().getAvailableDates();
@@ -113,33 +125,37 @@ public class AppointmentManager implements IAppointmentService {
 
                     try {
                         this.appointmentRepository.save(newAppointment);
-                        result = true;
+                        result.setMessage("Appointment updated!");
+                        result.setStatus(true);
+                        result.setHttpCode("201");
                     }catch (Exception e){
                         System.out.println(e.getMessage());
                         return null;
                     }
                 }
             }
-            return result;
         }
 
 
-        return null;
+        return result;
     }
 
     @Override
-    public Boolean delete(Long id) {
-        Boolean result = false;
+    public Result delete(Long id) {
+        Result result = new Result(false,"Appointment couldn't deleted!","400");
         if (this.appointmentRepository.existsById(id)){
             this.appointmentRepository.deleteById(id);
-            result = true;
+            result.setMessage("Appointment deleted!");
+            result.setStatus(true);
+            result.setHttpCode("204");
         }
 
         return result;
     }
 
     @Override
-    public List<Appointment> findAppointmentByDoctorIdAndDate(Long doctorID, LocalDate firstDate, LocalDate secondDate) {
+    public ResultData<List<Appointment>> findAppointmentByDoctorIdAndDate(Long doctorID, LocalDate firstDate, LocalDate secondDate) {
+        ResultData<List<Appointment>> resultData = new ResultData<>(false,"Appointment list by doctor id couldn't found!","404",null);
         if (this.doctorRepository.existsById(doctorID)){
             // Önce istenen doktorun bütün appointmentlarını çağır
             // sonra o appointmentları tek tek gez ve istenen iki tarih arasındaki bütün randevularını başka bir listeye al ve onu dön
@@ -149,24 +165,34 @@ public class AppointmentManager implements IAppointmentService {
 
             List<Appointment> appointmentsBetweenGivenDates = allAppointmentsOfDoctor.stream().filter(appointment -> appointment.getAppointmentDate().isAfter(firstDate.atStartOfDay()) && appointment.getAppointmentDate().isBefore(secondDate.atStartOfDay())).toList();
 
-            return appointmentsBetweenGivenDates;
+            resultData.setStatus(true);
+            resultData.setMessage("Appointment list by doctor id found!");
+            resultData.setHttpCode("200");
+            resultData.setData(appointmentsBetweenGivenDates);
 
         }else {
             throw new RuntimeException("There is no doctor in database with that id!");
         }
+        return resultData;
     }
 
     @Override
-    public List<Appointment> findAppointmentByAnimalIdAndDate(Long animalID, LocalDate firstDate, LocalDate secondDate) {
+    public ResultData<List<Appointment>> findAppointmentByAnimalIdAndDate(Long animalID, LocalDate firstDate, LocalDate secondDate) {
+        ResultData<List<Appointment>> resultData = new ResultData<>(false,"Appointment list by animal id couldn't found!","404",null);
         if (this.animalRepository.existsById(animalID)){
             // Amaç : verilen tarihler arasındaki belirli bir hayvanın randevularını görmek
             List<Appointment> allAppointmentsOfAnimal = this.animalRepository.findById(animalID).orElseThrow().getAppointmentList();
 
             List<Appointment> appointmentsBetweenGivenDates = allAppointmentsOfAnimal.stream().filter(appointment -> appointment.getAppointmentDate().isAfter(firstDate.atStartOfDay()) && appointment.getAppointmentDate().isBefore(secondDate.atStartOfDay())).toList();
 
-            return appointmentsBetweenGivenDates;
+            resultData.setStatus(true);
+            resultData.setMessage("Appointment list by animal id found!");
+            resultData.setHttpCode("200");
+            resultData.setData(appointmentsBetweenGivenDates);
         }else{
             throw new RuntimeException("There is no animal in database with that id!");
         }
+
+        return resultData;
     }
 }

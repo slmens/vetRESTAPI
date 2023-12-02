@@ -12,8 +12,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class AnimalSaveDTO {
 
-    private Long id;
-
     @NotBlank
     private String name;
 

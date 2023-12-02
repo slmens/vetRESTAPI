@@ -5,6 +5,8 @@ import com.vet.vet.BackEnd.dao.AnimalRepository;
 import com.vet.vet.BackEnd.dao.CustomerRepository;
 import com.vet.vet.BackEnd.dto.requestDto.AnimalSaveDTO;
 import com.vet.vet.BackEnd.entities.Animal;
+import com.vet.vet.core.exception.NotFoundException;
+import com.vet.vet.core.result.ResultData;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +27,7 @@ public class AnimalManager implements IAnimalService {
     }
 
     @Override
-    public List<Animal> findAll() {
+    public ResultData<List<Animal>> findAll() {
         return this.animalRepository.findAll();
     }
 
@@ -62,11 +64,10 @@ public class AnimalManager implements IAnimalService {
 
 
         if (this.animalRepository.existsById(id)){
-            animalSaveDTO.setId(id);
 
             try {
                 Animal animal = modelMapper.map(animalSaveDTO,Animal.class);
-                animal.setCustomer(this.customerRepository.findById(animalSaveDTO.getCustomerID()).orElseThrow());
+                animal.setCustomer(this.customerRepository.findById(animalSaveDTO.getCustomerID()).orElseThrow(() -> new NotFoundException("The animal you wanted couldn't found!")));
                 this.animalRepository.save(animal);
 
                 result = true;

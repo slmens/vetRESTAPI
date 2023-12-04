@@ -5,6 +5,7 @@ import com.vet.vet.BackEnd.dao.DoctorRepository;
 import com.vet.vet.BackEnd.dto.requestDto.DoctorSaveDTO;
 import com.vet.vet.BackEnd.dto.responseDto.DoctorResponseDTO;
 import com.vet.vet.BackEnd.entities.Doctor;
+import com.vet.vet.core.exception.RecordNotFoundException;
 import com.vet.vet.core.result.Result;
 import com.vet.vet.core.result.ResultData;
 import org.modelmapper.ModelMapper;
@@ -23,6 +24,7 @@ public class DoctorManager implements IDoctorService {
         this.modelMapper = modelMapper;
     }
 
+    // This method helps to find all doctors
     @Override
     public ResultData<List<DoctorResponseDTO>> findAll() {
         List<DoctorResponseDTO> doctorResponseDTOS = new ArrayList<>();
@@ -32,6 +34,7 @@ public class DoctorManager implements IDoctorService {
         return new ResultData<>(true, "Doctor list found!", "200", doctorResponseDTOS);
     }
 
+    // This method helps to find specific doctor
     @Override
     public ResultData<DoctorResponseDTO> findById(Long id) {
         ResultData<DoctorResponseDTO> resultData = new ResultData<>(false,"Doctor is not found!","404",null);
@@ -51,6 +54,7 @@ public class DoctorManager implements IDoctorService {
         return resultData;
     }
 
+    // This method helps to save a doctor
     @Override
     public Result save(DoctorSaveDTO doctorSaveDTO) {
         Result result = new Result(false,"Doctor couldn't saved!","400");
@@ -76,6 +80,7 @@ public class DoctorManager implements IDoctorService {
         return result;
     }
 
+    // This method helps to update a doctor
     @Override
     public Result update(DoctorSaveDTO doctorSaveDTO,Long id) {
         Result result = new Result(false,"Doctor couldn't updated!","400");
@@ -105,6 +110,7 @@ public class DoctorManager implements IDoctorService {
         return result;
     }
 
+    // This method helps to delete a doctor
     @Override
     public Result delete(Long id) {
         // If the result variable returns true, this means that no error occurred during the deletion process.
@@ -121,7 +127,7 @@ public class DoctorManager implements IDoctorService {
                 System.out.println(e.getMessage());
             }
         }else{
-            throw new RuntimeException(("there is no record with this id in database : " + id));
+            throw new RecordNotFoundException(("there is no record with this id in database : " + id));
         }
 
         return result;

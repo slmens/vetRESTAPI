@@ -4,6 +4,7 @@ import com.vet.vet.BackEnd.business.abstracts.ICustomerService;
 import com.vet.vet.BackEnd.dao.CustomerRepository;
 import com.vet.vet.BackEnd.entities.Animal;
 import com.vet.vet.BackEnd.entities.Customer;
+import com.vet.vet.core.exception.RecordNotFoundException;
 import com.vet.vet.core.result.Result;
 import com.vet.vet.core.result.ResultData;
 import org.springframework.stereotype.Service;
@@ -21,13 +22,13 @@ public class CustomerManager implements ICustomerService {
         this.animalManager = animalManager;
     }
 
-
+    // This method helps to find all customers
     @Override
     public ResultData<List<Customer>> findAll() {
-        ResultData<List<Customer>> resultData = new ResultData<>(true,"Customer list found!","200",this.customerRepository.findAll());
-        return resultData;
+        return new ResultData<>(true,"Customer list found!","200", this.customerRepository.findAll());
     }
 
+    // This method helps to find specific customer
     @Override
     public ResultData<Customer> findById(Long id) {
         ResultData<Customer> resultData = new ResultData<>(false,"Customer not found!","404",null);
@@ -43,6 +44,7 @@ public class CustomerManager implements ICustomerService {
         return resultData;
     }
 
+    // This method helps to save a customer
     @Override
     public Result save(Customer customer) {
         Result result = new Result(false,"Customer couldn't saved!","400");
@@ -59,6 +61,7 @@ public class CustomerManager implements ICustomerService {
         return result;
     }
 
+    // This method helps to update a customer
     @Override
     public Result update(Customer customer, Long id) {
         Result result = new Result(false,"Customer couldn't updated!","400");
@@ -81,6 +84,7 @@ public class CustomerManager implements ICustomerService {
         return result;
     }
 
+    // This method helps to delete a customer
     @Override
     public Result delete(Long id) {
         // If the result variable returns true, this means that no error occurred during the deletion process.
@@ -96,12 +100,13 @@ public class CustomerManager implements ICustomerService {
                 System.out.println(e.getMessage());
             }
         }else{
-            throw  new RuntimeException(("there is no record with this id in database : " + id));
+            throw  new RecordNotFoundException(("there is no record with this id in database : " + id));
         }
 
         return result;
     }
 
+    // This method helps to find all animals that has specific customer id
     @Override
     public ResultData<List<Animal>> findAllAnimalsByCustomerId(Long id) {
         ResultData<List<Animal>> resultData = new ResultData<>(false,"Animal list not found!","404",null);
@@ -115,6 +120,7 @@ public class CustomerManager implements ICustomerService {
         return resultData ;
     }
 
+    // This method helps to find all animals that has specific name
     @Override
     public ResultData<List<Customer>> findByName(String name) {
         List<Customer> allCustomers = this.customerRepository.findAll();

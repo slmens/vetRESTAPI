@@ -6,6 +6,7 @@ import com.vet.vet.BackEnd.dao.CustomerRepository;
 import com.vet.vet.BackEnd.dto.requestDto.AnimalSaveDTO;
 import com.vet.vet.BackEnd.entities.Animal;
 import com.vet.vet.core.exception.NotFoundException;
+import com.vet.vet.core.exception.RecordNotFoundException;
 import com.vet.vet.core.result.Result;
 import com.vet.vet.core.result.ResultData;
 import org.modelmapper.ModelMapper;
@@ -27,6 +28,7 @@ public class AnimalManager implements IAnimalService {
         this.customerRepository = customerRepository;
     }
 
+    // This method helps to find all animals in the database
     @Override
     public ResultData<List<Animal>> findAll() {
 
@@ -36,6 +38,7 @@ public class AnimalManager implements IAnimalService {
         return resultData;
     }
 
+    // This method helps to find specific animal in the database by id
     @Override
     public ResultData<Animal> findById(Long id) {
         try{
@@ -48,6 +51,7 @@ public class AnimalManager implements IAnimalService {
         }
     }
 
+    // This method helps to save animal to the database
     @Override
     public Result save(AnimalSaveDTO animalSaveDTO) {
         Result result = new Result(false,"Animal couldn't saved!","404");
@@ -66,6 +70,7 @@ public class AnimalManager implements IAnimalService {
         return result;
     }
 
+    // This method helps to update specific animal in the database
     @Override
     public Result update(AnimalSaveDTO animalSaveDTO, Long id) {
         Result result = new Result(false,"Animal couldn't updated!","404");
@@ -91,6 +96,7 @@ public class AnimalManager implements IAnimalService {
         return result;
     }
 
+    // This method helps to delete spesific animal in the database
     @Override
     public Result delete(Long id) {
         // If the result variable returns true, this means that no error occurred during the deletion process.
@@ -107,13 +113,13 @@ public class AnimalManager implements IAnimalService {
                 System.out.println(e.getMessage());
             }
         }else{
-            throw  new RuntimeException(("there is no record with this id in database : " + id));
+            throw  new RecordNotFoundException(("there is no record with this id in database : " + id));
         }
 
         return result;
     }
 
-    // This method uses by CustomerManager
+    // This method uses by CustomerManager to find animals that has specific customer id
     @Override
     public List<Animal> findAllAnimalsByCustomerId(Long id) {
         return this.animalRepository.findAllByCustomerId(id);

@@ -29,6 +29,7 @@ public class AppointmentManager implements IAppointmentService {
         this.animalRepository = animalRepository;
     }
 
+    // This method helps to find specific appointment
     @Override
     public ResultData<Appointment> findById(Long id) {
         ResultData<Appointment> resultData = new ResultData<>(false,"Appointment couldn't found!","404",null);
@@ -42,12 +43,14 @@ public class AppointmentManager implements IAppointmentService {
         return resultData;
     }
 
+    // This method helps to find all appointments
     @Override
     public ResultData<List<Appointment>> findAll() {
         ResultData<List<Appointment>> resultData = new ResultData<>(true,"Appointment list found!","200",this.appointmentRepository.findAll());
         return resultData;
     }
 
+    // This method helps to save an appointment but first it checks doctors available dates and then checks is there any other appointment on the same hour
     @Override
     public Result save(AppointmentSaveDTO appointmentSaveDTO) {
         Result result = new Result(false,"Appointment couldn't saved!","400");
@@ -97,6 +100,7 @@ public class AppointmentManager implements IAppointmentService {
         return result;
     }
 
+    // This method helps to update specific appointment
     @Override
     public Result update(AppointmentUpdateDTO appointmentUpdateDTO, Long id) {
         Result result = new Result(false,"Appointment couldn't updated!","400");
@@ -140,6 +144,7 @@ public class AppointmentManager implements IAppointmentService {
         return result;
     }
 
+    // This method helps to delete an appointment
     @Override
     public Result delete(Long id) {
         Result result = new Result(false,"Appointment couldn't deleted!","400");
@@ -153,6 +158,8 @@ public class AppointmentManager implements IAppointmentService {
         return result;
     }
 
+
+    // This method helps to find specific appointments that ona doctor has between the given dates
     @Override
     public ResultData<List<Appointment>> findAppointmentByDoctorIdAndDate(Long doctorID, LocalDate firstDate, LocalDate secondDate) {
         ResultData<List<Appointment>> resultData = new ResultData<>(false,"Appointment list by doctor id couldn't found!","404",null);
@@ -174,6 +181,7 @@ public class AppointmentManager implements IAppointmentService {
         return resultData;
     }
 
+    // This method helps to find specific appointments that ona animal has between the given dates
     @Override
     public ResultData<List<Appointment>> findAppointmentByAnimalIdAndDate(Long animalID, LocalDate firstDate, LocalDate secondDate) {
         ResultData<List<Appointment>> resultData = new ResultData<>(false,"Appointment list by animal id couldn't found!","404",null);

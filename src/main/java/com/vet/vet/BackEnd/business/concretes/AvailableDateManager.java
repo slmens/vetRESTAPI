@@ -6,6 +6,7 @@ import com.vet.vet.BackEnd.dao.DoctorRepository;
 import com.vet.vet.BackEnd.dto.requestDto.AvailableDateSaveDTO;
 import com.vet.vet.BackEnd.entities.AvailableDate;
 import com.vet.vet.BackEnd.entities.Doctor;
+import com.vet.vet.core.exception.RecordNotFoundException;
 import com.vet.vet.core.result.Result;
 import com.vet.vet.core.result.ResultData;
 import org.apache.velocity.exception.ResourceNotFoundException;
@@ -25,13 +26,14 @@ public class AvailableDateManager implements IAvailableDateService {
         this.doctorRepository = doctorRepository;
         this.modelMapper = modelMapper;
     }
-
+    // This method helps to find all available dates
     @Override
     public ResultData<List<AvailableDate>> findAll() {
         ResultData<List<AvailableDate>> resultData = new ResultData<>(true,"Available date list found!","200",this.availableDateRepository.findAll());
         return resultData;
     }
 
+    // This method helps to find specific available date
     @Override
     public ResultData<AvailableDate> findById(Long id) {
         ResultData<AvailableDate> resultData = new ResultData<>(false,"Available date couldn't found!","404",null);
@@ -48,6 +50,7 @@ public class AvailableDateManager implements IAvailableDateService {
         return resultData;
     }
 
+    // This method helps to save an available date
     @Override
     public Result save(AvailableDateSaveDTO availableDateSaveDTO) {
         AvailableDate availableDate = new AvailableDate();
@@ -73,6 +76,7 @@ public class AvailableDateManager implements IAvailableDateService {
         return result;
     }
 
+    // This method helps to update an available date
     @Override
     public Result update(AvailableDateSaveDTO availableDateSaveDTO,Long id) {
         Result result = new Result(false,"Available date couldn't updated!","400");
@@ -105,6 +109,7 @@ public class AvailableDateManager implements IAvailableDateService {
         return result;
     }
 
+    // This method helps to delete an available date
     @Override
     public Result delete(Long id) {
         Result result = new Result(false,"Available date couldn't deleted!","400");
@@ -118,7 +123,7 @@ public class AvailableDateManager implements IAvailableDateService {
                 System.out.println(e.getMessage());
             }
         }else{
-            throw  new RuntimeException(("there is no record with this id in database : " + id));
+            throw  new RecordNotFoundException(("there is no record with this id in database : " + id));
         }
 
         return result;

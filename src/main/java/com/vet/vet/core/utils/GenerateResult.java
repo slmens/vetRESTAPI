@@ -12,7 +12,7 @@ public class GenerateResult {
         return new ResultData<>(false, Msg.VALIDATE_ERROR,"400",data);
     }
 
-    public static <T> ResultData<T> internalServerError(String msg,T data){
-        return new ResultData<>(false, msg,"500",data);
+    public static <T> ResultData<T> dataAccessError(String msg){
+        return new ResultData<>(false, msg,"500",null);
     }
 }

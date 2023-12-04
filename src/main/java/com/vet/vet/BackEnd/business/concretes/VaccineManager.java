@@ -27,6 +27,7 @@ public class VaccineManager implements IVaccineService {
         this.animalRepository = animalRepository;
     }
 
+    // This method helps to find vaccine list that specific animal has
     @Override
     public ResultData<List<Vaccine>> findAllByAnimalId(Long id) {
         ResultData<List<Vaccine>> resultData = new ResultData<>(false,"Vaccine list couldn't found!","404",null);
@@ -41,6 +42,7 @@ public class VaccineManager implements IVaccineService {
         return resultData;
     }
 
+    // This method helps to find all animals that need vaccine between the given dates
     @Override
     public ResultData<List<Animal>> findAllAnimalsThatNeedVaccine(String vaccineCode,LocalDate startDate, LocalDate endDate) {
         //First, I will fetch all the animals from the database. Then, I will go through each animal and their vaccination list
@@ -90,6 +92,7 @@ public class VaccineManager implements IVaccineService {
         return new ResultData<>(true,"Animal list found!","200",filteredAnimalList);
     }
 
+    // This method helps to find specific vaccine
     @Override
     public ResultData<Vaccine> findById(Long id) {
         ResultData<Vaccine> resultData = new ResultData<>(false,"Vaccine couldn't found!","404",null);
@@ -103,6 +106,7 @@ public class VaccineManager implements IVaccineService {
         return resultData;
     }
 
+    // This method helps to save a vaccine
     @Override
     public Result save(VaccineSaveDTO vaccineSaveDTO) {
         Result result = new Result(false,"Vaccine couldn't saved!","400");
@@ -170,6 +174,7 @@ public class VaccineManager implements IVaccineService {
         return result;
     }
 
+    // This method helps to update a vaccine
     @Override
     public Result update(VaccineUpdateDTO vaccineUpdateDTO, Long id) {
         // If the employee tries to change the animalId of the vaccine then we need to check if the new animal can have that vaccine same as save method.
@@ -192,6 +197,7 @@ public class VaccineManager implements IVaccineService {
         return result;
     }
 
+    // This method helps to delete a doctor
     @Override
     public Result delete(Long id) {
         Result result = new Result(false,"Vaccine couldn't deleted!","400");

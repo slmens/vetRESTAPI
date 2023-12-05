@@ -1,0 +1,12 @@
+.appointment-list .content{
+    display : flex;
+}
+
+.appointment-list .appointment-grid{
+    flex : 2;
+}
+
+.appointment-list .appointment-form{
+    flex : 1;
+    padding: var(--lumo-space-m);
+}

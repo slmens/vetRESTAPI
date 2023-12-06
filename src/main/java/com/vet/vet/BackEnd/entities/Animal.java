@@ -50,7 +50,7 @@ public class Animal {
     private Customer customer;
 
     @JsonIgnoreProperties(value = {"animal"})
-    @OneToMany(mappedBy = "animal")
+    @OneToMany(mappedBy = "animal",cascade = CascadeType.REMOVE)
     private List<Appointment> appointmentList;
 
     @JsonIgnoreProperties(value = {"animal","appointmentList"})
